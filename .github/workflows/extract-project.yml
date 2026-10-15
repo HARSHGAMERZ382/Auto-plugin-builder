@@ -1,0 +1,33 @@
+name: Extract and Install Project Files
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract uploaded ZIP into repository root
+        run: |
+          test -f Auto-plugin-builder-ready.zip
+          unzip -o Auto-plugin-builder-ready.zip -d .
+          rm -f Auto-plugin-builder-ready.zip
+
+      - name: Commit extracted project files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Extract plugin builder project files"
+            git push
+          fi
+          
