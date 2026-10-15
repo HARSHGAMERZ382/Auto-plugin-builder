@@ -1,2 +1,0 @@
-# Auto-plugin-builder
-Plugin
